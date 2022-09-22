@@ -42,6 +42,7 @@ namespace MaerskScheduleBot
                 {
                     var messageToPin = await telegramHandler.client.SendTextMessageAsync(chat.Id, shipList[0].ShipName);
                     await telegramHandler.client.PinChatMessageAsync(chat, messageToPin.MessageId);
+                    await telegramHandler.client.SendTextMessageAsync(chat.Id, "Please enter /refresh to recieve a schedule.");
                     Console.WriteLine("Match found.");
                     return;
                 }
@@ -91,7 +92,7 @@ namespace MaerskScheduleBot
         {
             var ship = vesselsManager.ships.Find(ship => ship.ShipName == chat.PinnedMessage.Text);
             int shipIndex = vesselsManager.ships.IndexOf(ship);
-            vesselsManager.UpdateShipPorts(ship.ShipName);
+            vesselsManager.UpdateShipPorts(shipIndex);
             await telegramHandler.client.SendTextMessageAsync(chat.Id, vesselsManager.BuildSchedule(shipIndex));
         }
         #endregion

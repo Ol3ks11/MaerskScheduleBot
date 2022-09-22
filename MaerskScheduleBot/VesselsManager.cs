@@ -8,20 +8,13 @@ namespace MaerskScheduleBot
         [JsonProperty("vessels")]
         public List<Ship> ships { get; set; }
 
-        public void UpdateShipPorts(string shipName)
+        public void UpdateShipPorts(int shipsId)
         {
-            for (int i = 0; i < ships.Count; i++)
-            {
-                if (ships[i].ShipName == shipName)
-                {
-                    Ship temp = new();
-                    temp = JsonConvert.DeserializeObject<Ship>(GetPortsJson(ships[i]).Result);
-                    temp.ShipName = ships[i].ShipName;
-                    temp.ShipCode = ships[i].ShipCode;
-                    ships[i] = temp;
-                    break;
-                }
-            }
+            Ship temp = new();
+            temp = JsonConvert.DeserializeObject<Ship>(GetPortsJson(ships[shipsId]).Result);
+            temp.ShipName = ships[shipsId].ShipName;
+            temp.ShipCode = ships[shipsId].ShipCode;
+            ships[shipsId] = temp;
         }
 
         private async Task<string> GetPortsJson(Ship ship)
@@ -54,11 +47,11 @@ namespace MaerskScheduleBot
         public string BuildSchedule(int shipIndex)
         {
             StringBuilder builder = new();
-            builder.AppendLine("Schedule for " + ships[shipIndex].ShipName +":");
+            builder.AppendLine("Schedule for **" + ships[shipIndex].ShipName +"**:");
             builder.AppendLine();
             foreach (var port in ships[shipIndex].Ports)
             {
-                builder.AppendLine("Port call: " + port.port);
+                builder.AppendLine("Port call: **" + port.port + "**");
                 builder.AppendLine("Terminal: " + port.terminal);
                 builder.AppendLine("Arrival: " + port.arrival.ToString("dd-MM-yyyy HH:mm"));
                 builder.AppendLine("Departure: " + port.departure.ToString("dd-MM-yyyy HH:mm"));

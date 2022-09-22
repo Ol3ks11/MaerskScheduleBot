@@ -26,13 +26,24 @@ namespace MaerskScheduleBot
                 Console.WriteLine(message.Text);
 
                 MessageHandler messageHandler = new(this, vesselsManager, message, chat);
-                await messageHandler.ProceedMessage();
+
+                try
+                {
+                    await messageHandler.ProceedMessage();
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine("Error");
+                    Console.WriteLine(exception.Message);
+                }
+                finally { }
             }
             return;
         }
         public Task TelegramError(ITelegramBotClient client, Exception exception, CancellationToken cancelToken)
         {
             Console.WriteLine("Error");
+            Console.WriteLine(exception.Message);
             throw exception;
         }
     }
